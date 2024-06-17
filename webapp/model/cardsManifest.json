@@ -1,0 +1,292 @@
+{
+    "FaturamentoAno": {
+        "sap.app": {
+            "type": "card",
+            "id": "br.com.gestao.dashboard.fatano"
+        },
+        "sap.card": {
+            "type": "Analytical",
+            "header": {
+                "title": "Faturamento por Ano"
+            },
+            "configuration": {
+                "destinations": {
+                    "S4_Hana_Treinamento": {
+                        "name": "S4_Hana_Treinamento",
+                        "defaultUrl": "/sap/opu/odata/sap/ZSB_PRODUCAO_358"
+                    }
+                }
+            },
+            "data": {
+                "request": {
+                    "url": "{{destinations.S4_Hana_Treinamento}}/FaturamentoAno",
+                    "withCredentials": true,
+                    "parameters": {
+                        "$format": "json",
+                        "$orderby": "Erdat_Year asc"
+                    }
+                },
+                "path": "/d/results"
+            },
+            "content": {
+                "chartType": "column",
+                "chartProperties": {
+                    "legendGroup": {
+                        "layout": {
+                            "position": "bottom"
+                        }
+                    },
+                    "title": {
+                        "visible": true,
+                        "text": "Vendas Diretas"
+                    },
+                    "plotArea": {
+                        "dataPointStyle": {
+                            "rules": [
+                                {
+                                    "dataContext": {
+                                        "Revenue": {
+                                            "max": "20000000"
+                                        }
+                                    },
+                                    "properties": {
+                                        "color": "sapUiChartPaletteSemanticBad"
+                                    },
+                                    "displayName": "Faturamento <= 20M"
+                                },
+                                {
+                                    "dataContext": {
+                                        "Revenue": {
+                                            "min": "20000000",
+                                            "max": "70000000"
+                                        }
+                                    },
+                                    "properties": {
+                                        "color": "sapUiChartPaletteSemanticCritical"
+                                    },
+                                    "displayName": "Faturamento entre 20M e 70M"
+                                }
+                            ],
+                            "others": {
+                                "properties": {
+                                    "color": "sapUiChartPaletteSemanticGood"
+                                },
+                                "displayName": "Faturamento> 70M"
+                            }
+                        },
+                        "dataLabel": {
+                            "visible": true
+                        }
+                    }
+                },
+                "dimensions": [
+                    {
+                        "name": "Erdat_Year",
+                        "value": "{Erdat_Year}"
+                    }
+                ],
+                "measures": [
+                    {
+                        "name": "Revenue",
+                        "value": "{Revenue}"
+                    }
+                ],
+                "feeds": [
+                    {
+                        "type": "Dimension",
+                        "uid": "categoryAxis",
+                        "values": [
+                            "Erdat_Year"
+                        ]
+                    },
+                    {
+                        "type": "Measure",
+                        "uid": "valueAxis",
+                        "values": [
+                            "Revenue"
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "CategoriasProdutos": {
+        "sap.app": {
+            "type": "card",
+            "id": "br.com.gestao.dashboard.countprod"
+        },
+        "sap.card": {
+            "type": "Analytical",
+            "header": {
+                "title": "Categorias de Produtos"
+            },
+            "configuration": {
+                "destinations": {
+                    "S4_Hana_Treinamento": {
+                        "name": "S4_Hana_Treinamento",
+                        "defaultUrl": "/sap/opu/odata/sap/ZSB_PRODUCAO_358"
+                    }
+                }
+            },
+            "data": {
+                "request": {
+                    "url": "{{destinations.S4_Hana_Treinamento}}/CountCategoriaProdutos",
+                    "withCredentials": true,
+                    "parameters": {
+                        "$format": "json"
+                    }
+                },
+                "path": "/d/results"
+            },
+            "content": {
+                "chartType": "Donut",
+                "chartProperties": {
+                    "legendGroup": {
+                        "visible": "true"
+                    },
+                    "title": {
+                        "visible": true,
+                        "text": "% Categoria de Produtos"
+                    },
+                    "plotArea": {
+                        "dataLabel": {
+                            "visible": true,
+                            "showTotal": true
+                        }
+                    }
+                },
+                "dimensions": [
+                    {
+                        "name": "DescriptionCat",
+                        "value": "{DescriptionCat}"
+                    }
+                ],
+                "measures": [
+                    {
+                        "name": "TotalCategory",
+                        "value": "{TotalCategory}"
+                    }
+                ],
+                "feeds": [
+                    {
+                        "type": "Dimension",
+                        "uid": "color",
+                        "values": [
+                            "DescriptionCat"
+                        ]
+                    },
+                    {
+                        "type": "Measure",
+                        "uid": "size",
+                        "values": [
+                            "TotalCategory"
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "TopProdutos": {
+        "sap.app": {
+            "type": "card",
+            "id": "br.com.gestao.dashboard.topprod"
+        },
+        "sap.card": {
+            "type": "List",
+            "header": {
+                "title": "Produtos filtrados por {filters>/mainCategory/selectedItem/title}",
+                "subTitle": "Top {parameters>maxItems/value} produtos cadastrados",
+                "icon": {
+                    "src": "sap-icon://desktop-mobile",
+                    "visible": true
+                },
+                "status": {
+                    "text": "top {parameters>/maxItems/value}"
+                }
+            },
+            "configuration": {
+                "destinations": {
+                    "S4_Hana_Treinamento": {
+                        "name": "S4_Hana_Treinamento",
+                        "defaultUrl": "/sap/opu/odata/sap/ZSB_PRODUCAO_358"
+                    }
+                },
+                "filters": {
+                    "mainCategory": {
+                        "value": "{{parameters.selectedCategoryValue}}",
+                        "type": "string",
+                        "item": {
+                            "path": "/d/results",
+                            "template": {
+                                "key": "{Category}",
+                                "title": "{Description}"
+                            }
+                        },
+                        "data": {
+                            "request": {
+                                "url": "{{destinations.S4_Hana_Treinamento}}/Categorias",
+                                "withCredentials": true
+                            }
+                        }
+                    }
+                },
+                "parameters": {
+                    "maxItems": {
+                        "value": 5,
+                        "type": "integer"
+                    },
+                    "selectedCategoryValue": {
+                        "value": "CNTB"
+                    }
+                }
+            },
+            "data": {
+                "request": {
+                    "url": "{{destinations.S4_Hana_Treinamento}}/Produtos",
+                    "withCredentials": true,
+                    "parameters": {
+                        "$filter": "Category eq '{filters>/mainCategory/value}'",
+                        "$top": "{parameters>/maxItems/value}",
+                        "$format": "json",
+                        "$orderby": "Createdat asc"
+                    }
+                },
+                "path": "/d/results"
+            },
+            "content": {
+                "item": {
+                    "title": {
+                        "value": "{Productid}"
+                    },
+                    "description": {
+                        "value": "{Name}"
+                    },
+                    "info": {
+                        "value": "{= ${Status} === 'E' ? 'Em Estoque' : ${Status} === 'P' ? 'Em Produção' : 'Fora de Estoque' }",
+                        "state": "{= ${Status} === 'E' ? 'Success' : ${Status} === 'P' ? 'Warning' : 'Error' }",
+                        "showStateIcon": true
+
+                    },
+                    "icon": {
+                        "src": "sap-icon://product"
+                    },
+                    "attributes": [
+                        {
+                            "value": "{Description}"
+                        },
+                        {
+                            "value": "{Category}"
+                        },
+                        {
+                            "value": "{Supplierid}"
+                        },
+                        {
+                            "value": "{= format.currency(${Price},${Currencycode})}"
+                        }
+                    ],
+                    "attributesLayoutType": "TwoColumns"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,88 @@
+<mvc:View
+    controllerName="br.com.gestao.dashboard.controller.Dashboard"
+    xmlns:f="sap.f"
+    xmlns:w="sap.ui.integration.widgets"
+    xmlns:core="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+>
+    <FlexBox
+        id="_IDGenFlexBox1"
+        alignItems="Center"
+        justifyContent="Center"
+        class="sapUiResponsiveMargin"
+    >
+        <ObjectStatus
+            id="_IDGenObjectStatus1"
+            class="sapMObjectStatusLarge"
+            text="{i18n>titleDashboard}"
+            state="Error"
+            icon="sap-icon://business-objects-experience"
+        />
+    </FlexBox>
+
+    <f:GridContainer
+        id="objGridContainer"
+        class="sapUiSmallMargin"
+    >
+        <f:layout>
+            <f:GridContainerSettings
+                id="_IDGenGridContainerSettings1"
+                rowSize="84px"
+                columnSize="84px"
+                gap="8px"
+            />
+        </f:layout>
+        <f:layoutXS>
+            <f:GridContainerSettings
+                id="_IDGenGridContainerSettings2"
+                rowSize="70px"
+                columnSize="70px"
+                gap="8px"
+            />
+        </f:layoutXS>
+
+        <!-- Objeto Card Top 5 Produtos / Filtro -->
+        <w:Card
+            id="_IDGenCard3"
+            class="sapUiMediumMargin"
+            manifest="{cards>/TopProdutos}"
+        >
+            <w:layoutData>
+                <f:GridContainerItemLayoutData
+                    id="_IDGenGridContainerItemLayoutData3"
+                    columns="5"
+                />
+            </w:layoutData>
+        </w:Card>
+
+        <!-- Objeto Card FatuamentoAno -->
+        <w:Card
+            id="_IDGenCard1"
+            class="sapUiMediumMargin"
+            manifest="{cards>/FaturamentoAno}"
+        >
+            <w:layoutData>
+                <f:GridContainerItemLayoutData
+                    id="_IDGenGridContainerItemLayoutData1"
+                    columns="6"
+                />
+            </w:layoutData>
+        </w:Card>
+
+        <!-- Objeto Card Count de Categorias -->
+        <w:Card
+            id="_IDGenCard2"
+            class="sapUiMediumMargin"
+            manifest="{cards>/CategoriasProdutos}"
+        >
+            <w:layoutData>
+                <f:GridContainerItemLayoutData
+                    id="_IDGenGridContainerItemLayoutData2"
+                    columns="6"
+                />
+            </w:layoutData>
+        </w:Card>
+    </f:GridContainer>
+</mvc:View>
